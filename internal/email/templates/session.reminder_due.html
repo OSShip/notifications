@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Session Reminder</h1>
+  <p>Your mentorship session starts soon. Join via your dashboard.</p>
+  {{if .Payload.session_id}}<p>Session ID: {{.Payload.session_id}}</p>{{end}}
+</body>
+</html>

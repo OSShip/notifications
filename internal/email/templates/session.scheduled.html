@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Session Scheduled</h1>
+  <p>A new live mentorship session has been scheduled. Check your dashboard to join.</p>
+  {{if .Payload.session_id}}<p>Session ID: {{.Payload.session_id}}</p>{{end}}
+</body>
+</html>
