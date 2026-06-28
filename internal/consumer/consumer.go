@@ -3,10 +3,11 @@ package consumer
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"log/slog"
 
 	"github.com/OSShip/notifications/internal/email"
 	"github.com/OSShip/utils/kafka"
+	"github.com/OSShip/utils/observability"
 )
 
 var topics = []string{"listing.events", "enrollment.events", "payment.events", "session.events", "mentor.events"}
@@ -20,37 +21,44 @@ func (c *Consumer) Start(ctx context.Context) {
 	for _, topic := range topics {
 		go c.consumeTopic(ctx, topic)
 	}
+	slog.Info("notification consumers running", "topics", topics, "brokers", c.Brokers)
 }
 
 func (c *Consumer) consumeTopic(ctx context.Context, topic string) {
 	reader := kafka.NewReader(c.Brokers, topic, "notifications-group")
 	defer reader.Close()
+	slog.Info("kafka consumer started", "topic", topic)
 	for {
 		msg, err := reader.ReadMessage(ctx)
 		if err != nil {
 			if ctx.Err() != nil {
+				slog.Info("kafka consumer stopping", "topic", topic)
 				return
 			}
-			log.Printf("kafka read error [%s]: %v", topic, err)
+			slog.Warn("kafka read error", "topic", topic, "err", err)
 			continue
 		}
 		var event kafka.Event
 		if err := json.Unmarshal(msg.Value, &event); err != nil {
+			slog.Warn("kafka message parse error", "topic", topic, "err", err)
 			continue
 		}
+		slog.Debug("kafka event received", "topic", topic, "type", event.Type)
 		subject, body, ok := email.Render(event.Type, event.Payload)
 		if !ok {
+			slog.Debug("no template for event", "type", event.Type)
 			continue
 		}
 		to := email.ResolveRecipient(event.Type, event.Payload)
 		if to == "" {
-			log.Printf("no recipient for %s, skipping", event.Type)
+			slog.Warn("no recipient for event", "type", event.Type)
 			continue
 		}
 		if err := c.Sender.Send(to, subject, body); err != nil {
-			log.Printf("email error: %v", err)
+			slog.Error("email send failed", "type", event.Type, "to", to, "err", err)
+			observability.CaptureError(err, map[string]string{"topic": topic, "event_type": event.Type})
 		} else {
-			log.Printf("sent notification: %s -> %s", event.Type, to)
+			slog.Info("notification sent", "type", event.Type, "to", to, "subject", subject)
 		}
 	}
 }
