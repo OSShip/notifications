@@ -6,14 +6,14 @@ require (
 	github.com/OSShip/utils/kafka v0.0.0
 	github.com/OSShip/utils/observability v0.0.0
 	github.com/go-chi/chi/v5 v5.1.0
-	github.com/segmentio/kafka-go v0.4.47
 )
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/getsentry/sentry-go v0.31.1 // indirect
+	github.com/getsentry/sentry-go v0.34.0 // indirect
+	github.com/getsentry/sentry-go/slog v0.34.0 // indirect
 	github.com/go-redis/redis_rate/v10 v10.0.1 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
@@ -23,6 +23,7 @@ require (
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/redis/go-redis/v9 v9.7.0 // indirect
+	github.com/segmentio/kafka-go v0.4.47 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect

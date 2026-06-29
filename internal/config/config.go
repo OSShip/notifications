@@ -14,7 +14,7 @@ func Load() Config {
 		Port:         env("PORT", "8086"),
 		KafkaBrokers: env("KAFKA_BROKERS", "kafka:9092"),
 		ResendAPIKey: env("RESEND_API_KEY", ""),
-		FromEmail:    env("RESEND_FROM_EMAIL", "noreply@osship.local"),
+		FromEmail:    env("RESEND_FROM_EMAIL", "noreply@osship.app"),
 	}
 }
 
