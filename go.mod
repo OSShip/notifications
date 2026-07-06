@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/OSShip/utils/kafka v0.0.0
 	github.com/OSShip/utils/observability v0.0.0
-	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/chi/v5 v5.2.2
 )
 
 require (
